@@ -1,4 +1,5 @@
 #include "ga/algorithm.hpp"
+#include <stdexcept>
 
 class problem
 {

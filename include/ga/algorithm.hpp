@@ -13,6 +13,7 @@
 #include <random>
 #include <type_traits>
 #include <vector>
+#include <stdexcept>
 
 namespace ga
 {
@@ -28,7 +29,7 @@ template <typename T, typename E = void> class algorithm
                 "Problem type doesn't comply with the required concept");
 };
 
-template <typename T> class algorithm<T, meta::requires<meta::Problem<T>>>
+template <typename T> class algorithm<T, meta::requirescheck<meta::Problem<T>>>
 {
 public:
   using individual_type = typename T::individual_type;
@@ -172,14 +173,14 @@ private:
   }
 };
 
-template <typename T, typename I, typename G, typename = meta::requires<meta::Problem<T>>>
+template <typename T, typename I, typename G, typename = meta::requirescheck<meta::Problem<T>>>
 auto make_algorithm(T problem, std::vector<I> population, const std::size_t elite_count,
                     G generator) -> algorithm<T>
 {
   return {std::move(problem), std::move(population), elite_count, std::move(generator)};
 }
 
-template <typename T, typename... Args, typename = meta::fallback<meta::Problem<T>>>
+template <typename T, typename... Args, typename = meta::fallbackheck<meta::Problem<T>>>
 auto make_algorithm(T, Args&&...) -> void
 {
   static_assert(meta::always_false<T>::value,

@@ -3,6 +3,9 @@ project(GA VERSION 2.0.0)
 
 configure_file("include/ga/version.hpp.in" "include/ga/version.hpp")
 
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
 add_library(ga INTERFACE)
 
 target_compile_features(ga INTERFACE cxx_std_11)
@@ -14,7 +17,7 @@ target_include_directories(ga INTERFACE
 target_include_directories(ga SYSTEM INTERFACE
   $<INSTALL_INTERFACE:$<INSTALL_PREFIX>/include>)
 
-option(GA_BUILD_TEST "whether or not to build the test" OFF)
+option(GA_BUILD_TEST "whether or not to build the test" ON)
 if(GA_BUILD_TEST)
   enable_testing()
   add_subdirectory(test)

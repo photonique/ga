@@ -17,7 +17,7 @@ template <typename T, typename E = void> class problem
 };
 
 template <typename T>
-class problem<T, meta::requires<meta::Problem<T>, meta::SingleEvaluation<T>>> : private T
+class problem<T, meta::requirescheck<meta::Problem<T>, meta::SingleEvaluation<T>>> : private T
 {
 public:
   using T::mutate;
@@ -47,7 +47,7 @@ public:
 };
 
 template <typename T>
-class problem<T, meta::requires<meta::Problem<T>, meta::MultiEvaluation<T>>> : private T
+class problem<T, meta::requirescheck<meta::Problem<T>, meta::MultiEvaluation<T>>> : private T
 {
 public:
   using T::evaluate;

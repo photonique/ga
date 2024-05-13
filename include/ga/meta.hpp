@@ -67,10 +67,10 @@ struct compiles<T, Expression, void_t<Expression<T>>> : std::true_type
 };
 
 template <typename... Checks>
-using requires = typename std::enable_if<conjunction<Checks...>::value>::type;
+using requirescheck = typename std::enable_if<conjunction<Checks...>::value>::type;
 
 template <typename... Checks>
-using fallback = typename std::enable_if<conjunction<negation<Checks>...>::value>::type;
+using fallbackheck = typename std::enable_if<conjunction<negation<Checks>...>::value>::type;
 
 // based on http://stackoverflow.com/questions/13830158/check-if-a-variable-is-iterable
 namespace detail
@@ -98,7 +98,7 @@ template <typename T, typename = void> struct Iterable : std::false_type
 
 template <typename T>
 struct Iterable<
-  T, requires<conjunction<
+  T, requirescheck<conjunction<
        detail::has_begin<T>, detail::has_end<T>, detail::has_inc<detail::begin_result<T>>,
        detail::has_inc<detail::end_result<T>>, detail::has_deref<detail::begin_result<T>>,
        detail::has_deref<detail::end_result<T>>,
@@ -151,7 +151,7 @@ template <typename T, typename = void> struct SingleEvaluation : std::false_type
 
 template <typename T>
 struct SingleEvaluation<
-  T, requires<conjunction<has_evaluate<T>,
+  T, requirescheck<conjunction<has_evaluate<T>,
                           std::is_same<typename T::fitness_type, evaluate_result<T>>>>>
   : std::true_type
 {
@@ -163,7 +163,7 @@ template <typename T, typename = void> struct MultiEvaluation : std::false_type
 
 template <typename T>
 struct MultiEvaluation<
-  T, requires<
+  T, requirescheck<
        conjunction<has_multi_evaluate<T>, std::is_same<void, multi_evaluate_result<T>>>>>
   : std::true_type
 {
@@ -175,7 +175,7 @@ template <typename T, typename = void> struct Problem : std::false_type
 
 template <typename T>
 struct Problem<
-  T, requires<conjunction<has_mutate<T>, std::is_same<mutate_result<T>, void>,
+  T, requirescheck<conjunction<has_mutate<T>, std::is_same<mutate_result<T>, void>,
                           has_recombine<T>, Iterable<recombine_result<T>>,
                           std::is_same<typename T::individual_type,
                                        typename recombine_result<T>::value_type>,
